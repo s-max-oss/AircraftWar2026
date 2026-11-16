@@ -71,6 +71,15 @@ public final class GameConfig {
     public static final int BASE_ENEMY_POWER = 40;
     /** 英雄机基础火力，等级加成在此之上累加。 */
     public static final int HERO_POWER_BASE = 30;
+    /** Boss 子弹威力。 */
+    public static final int BOSS_BULLET_POWER = 40;
+    /** 顶级精英敌机子弹威力。 */
+    public static final int ELITE_PRO_BULLET_POWER = 40;
+    /**
+     * 英雄机重开时距底部的距离。迁移源两处取值不一致（首次创建贴图底边、重开固定 100），
+     * 这里原样保留，避免"修"出行为差异。
+     */
+    public static final int HERO_RESET_BOTTOM_MARGIN = 100;
 
     // ==================== 生成周期（帧） ====================
 
