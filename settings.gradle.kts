@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AircraftWar"
+rootProject.name = "AircraftWar2026"
 include(":app")
