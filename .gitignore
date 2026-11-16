@@ -1,0 +1,22 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# ---- 本课程追加（AGENTS.md §11）----
+# 签名材料：绝不入库
+*.jks
+*.keystore
+# 运行时数据（如旧版 game_records.dat）
+*.dat

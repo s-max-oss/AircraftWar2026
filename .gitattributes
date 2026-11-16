@@ -1,0 +1,16 @@
+# 文本归一化 + 二进制保护（AGENTS.md §11）
+* text=auto
+
+# 脚本换行：Windows 批处理必须 CRLF，Unix 脚本保持 LF
+*.bat   text eol=crlf
+gradlew text eol=lf
+
+# 资源一律按二进制处理，防止后续加入图片/音频被改坏
+*.png   binary
+*.jpg   binary
+*.webp  binary
+*.wav   binary
+*.mp3   binary
+*.ogg   binary
+*.jar   binary
+*.keystore binary
