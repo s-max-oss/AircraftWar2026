@@ -64,7 +64,7 @@ S1 未做（排 S2）：主菜单/难度选择/结算页三页导航、音效与
 
 ## 已知限制
 
-- 模拟器（软件渲染）实测约 **21.5fps**，逻辑固定 25Hz（掉帧时追帧）；真机预期更高，S6 用真机复测。
+- 模拟器实测约 **21.5fps**：宿主 GPU 已生效（emulator 日志 `Graphics backend: gfxstream` + `Intel Arc`），瓶颈在客户端合成；逻辑固定 25Hz（掉帧时追帧），真机预期更高，S6 用真机复测。
 - 资源名 `elitePlus` / `elitePro` / `prop_bulletPlus` 因 Android 不允许大写，落位时改为 `elite_plus` / `elite_pro` / `prop_bullet_plus`。
 - `core/record/GameRecordDaoImpl` 未迁：S3 直接用 Room 实现，接口与实体不变。
 
