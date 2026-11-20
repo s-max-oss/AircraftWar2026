@@ -1,5 +1,6 @@
 package edu.hitsz.aircraftwar.core.strategy;
 
+import edu.hitsz.aircraftwar.core.config.GameConfig;
 import edu.hitsz.aircraftwar.core.aircraft.AbstractAircraft;
 import edu.hitsz.aircraftwar.core.aircraft.EnemyAircraft;
 import edu.hitsz.aircraftwar.core.aircraft.HeroAircraft;
@@ -36,7 +37,7 @@ public class ScatterShootStrategy implements ShootStrategy {
         List<BaseBullet> res = new LinkedList<>();
         int x = aircraft.getLocationX();
         int y = aircraft.getLocationY() + direction * 2;
-        int speedY = aircraft.getSpeedY() + direction * 5;
+        int speedY = aircraft.getSpeedY() + direction * GameConfig.scaledSpeed(5);
         BaseBullet bullet;
 
         for (int i = 0; i < shootNum; i++) {

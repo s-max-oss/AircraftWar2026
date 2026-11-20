@@ -62,15 +62,15 @@ public class Boss extends EnemyAircraft {
         int speedY = this.getSpeedY();
         double rand = Math.random();
         if (rand < 0.2) {
-            res.add(DropFactoryManager.getFactory("Bomb").createDrop(x, y, speedX, speedY + 2));
+            res.add(DropFactoryManager.getFactory("Bomb").createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else if (rand < 0.4) {
-            res.add(DropFactoryManager.getFactory("Freeze").createDrop(x, y, speedX, speedY + 2));
+            res.add(DropFactoryManager.getFactory("Freeze").createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else if (rand < 0.6) {
-            res.add(DropFactoryManager.getFactory("AddBullet").createDrop(x, y, speedX, speedY + 2));
+            res.add(DropFactoryManager.getFactory("AddBullet").createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else if (rand < 0.8) {
-            res.add(DropFactoryManager.getFactory("Hp").createDrop(x, y, speedX, speedY + 2));
+            res.add(DropFactoryManager.getFactory("Hp").createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else {
-            res.add(DropFactoryManager.getFactory("AddBulletPlus").createDrop(x, y, speedX, speedY + 2));
+            res.add(DropFactoryManager.getFactory("AddBulletPlus").createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         }
         return res;
     }

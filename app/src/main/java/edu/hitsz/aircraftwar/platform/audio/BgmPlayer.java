@@ -19,7 +19,7 @@ import edu.hitsz.aircraftwar.R;
  * {@code setLooping(true)}，语义一致；桌面版按相对路径 {@code src/videos/*.wav} 读文件，
  * 在 APK 里必然失败，这里改走 {@code R.raw}（AGENTS §4 陷阱 3）。
  *
- * <p>为什么加载放到后台线程：两首 WAV 合计 9MB，在 512×768 的游戏里 {@code MediaPlayer.create}
+ * <p>为什么加载放到后台线程：两首 WAV 合计 9MB，进游戏时 {@code MediaPlayer.create}
  * 要建提取器 + 准备解码器，实测主线程上会吃掉几百毫秒——点"开始游戏"到画面出现会卡一下。
  * 这里改成后台建好、回主线程再播：调用方放心地在主线程 {@link #playNormal()}，还没准备好就先记账。
  *

@@ -1,5 +1,6 @@
 package edu.hitsz.aircraftwar.core.strategy;
 
+import edu.hitsz.aircraftwar.core.config.GameConfig;
 import edu.hitsz.aircraftwar.core.aircraft.AbstractAircraft;
 import edu.hitsz.aircraftwar.core.aircraft.EnemyAircraft;
 import edu.hitsz.aircraftwar.core.aircraft.HeroAircraft;
@@ -40,7 +41,7 @@ public class RingShootStrategy implements ShootStrategy {
 
         // 每个子弹的角度（360 度均分）
         double angleStep = 2 * Math.PI / shootNum;
-        int bulletSpeed = 5;
+        int bulletSpeed = GameConfig.scaledSpeed(5);
 
         for (int i = 0; i < shootNum; i++) {
             double angle = i * angleStep;

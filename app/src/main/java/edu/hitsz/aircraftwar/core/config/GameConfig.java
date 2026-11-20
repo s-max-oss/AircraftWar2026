@@ -22,12 +22,49 @@ public final class GameConfig {
 
     // ==================== 画布与节拍 ====================
 
-    /** 逻辑画布宽。渲染层按 letterbox 映射到真实屏幕，不清算坐标。 */
+    /** 逻辑画布宽。手机屏宽千差万别，但宽度始终保持 512，横向手感与判定不变。 */
     public static final int WINDOW_WIDTH = 512;
-    /** 逻辑画布高。 */
-    public static final int WINDOW_HEIGHT = 768;
+    /** 桌面版设计高度，也是"视口未注入"时的默认高度（单测跑这个值）。 */
+    public static final int DESIGN_HEIGHT = 768;
+    /**
+     * 逻辑画布高。<b>这是本类唯一的可变字段</b>。
+     *
+     * <p>桌面版窗口是 512×768（2:3），手机屏是 9:20 甚至更长。若强行沿用 768，画面只能
+     * letterbox，上下各留一大条黑边（S2 实测：1080×2400 上黑边占 32%）。
+     * 所以由平台层用 {@link #setViewportHeight(int)} 按屏幕比例注入：
+     * 宽度不变、高度"长高"，等于把战场向上下延伸，飞机与判定不变形。
+     *
+     * <p>默认值等于 {@link #DESIGN_HEIGHT}，保证 JVM 单测（不注入视口）行为与桌面版一致。
+     */
+    public static int WINDOW_HEIGHT = DESIGN_HEIGHT;
     /** 逻辑帧间隔（毫秒）。桌面版 {@code Timer(40ms)}，Android 渲染线程沿用同一节拍。 */
     public static final int TICK_MS = 40;
+
+    /**
+     * 注入视口高度（逻辑单位）。只允许平台层在创建 {@code GameLogic} 之前调用一次。
+     *
+     * @param height 逻辑高度，必须为正；非法值忽略，保持默认 768
+     */
+    public static void setViewportHeight(int height) {
+        if (height > 0) {
+            WINDOW_HEIGHT = height;
+        }
+    }
+
+    /**
+     * 视口相对桌面版的纵向倍率（手机约 1.48）。
+     *
+     * <p>用途：把<b>纵向</b>速度同比放大，让"敌机从顶飞到屏幕底"的<b>时间</b>与桌面版一致；
+     * 横向速度不缩放，因为宽度仍然是 512。
+     */
+    public static double verticalScale() {
+        return WINDOW_HEIGHT / (double) DESIGN_HEIGHT;
+    }
+
+    /** 按视口倍率换算一个纵向速度/位移常量（四舍五入到整数像素）。 */
+    public static int scaledSpeed(int baseSpeed) {
+        return (int) Math.round(baseSpeed * verticalScale());
+    }
 
     // ==================== 图片尺寸 ====================
 

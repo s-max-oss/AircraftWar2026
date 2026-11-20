@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,10 +79,14 @@ public class GameFragment extends Fragment implements GameEvents {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 先注入视口再建游戏：逻辑画布"长高"到屏幕比例，战场铺满、不再上下留黑
+        applyViewport();
+
         game = createGame();
         gameView = new GameView(requireContext());
         gameView.setGame(game);
-        binding.gameContainer.addView(gameView, letterboxParams());
+        binding.gameContainer.addView(gameView, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         binding.btnPause.setOnClickListener(v -> openPauseMenu());
         binding.btnResume.setOnClickListener(v -> resumeGame());
@@ -127,18 +130,20 @@ public class GameFragment extends Fragment implements GameEvents {
     }
 
     /**
-     * GameView 的 Surface 缓冲固定 512×768（省填充率），视图按同比例居中、四周补黑边；
-     * 屏幕比例不同时也不会把画面拉变形（S1 的 letterbox 逻辑原样搬过来）。
+     * 把屏幕比例注入逻辑视口：宽仍 512，高度按屏高/屏宽换算（1080×2400 → 1138）。
+     *
+     * <p>为什么要这么做：桌面版是 512×768（2:3），手机是 9:20；沿用 768 只能 letterbox，
+     * 上下各留 32% 的黑边。长高之后战场铺满，敌机从物理顶边出生、英雄机贴底边，
+     * 飞机尺寸与碰撞判定都不变（宽度没动）。
      */
-    private FrameLayout.LayoutParams letterboxParams() {
+    private void applyViewport() {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
-        int height = (int) (width * (float) GameConfig.WINDOW_HEIGHT / GameConfig.WINDOW_WIDTH);
-        if (height > metrics.heightPixels) {
-            height = metrics.heightPixels;
-            width = (int) (height * (float) GameConfig.WINDOW_WIDTH / GameConfig.WINDOW_HEIGHT);
+        if (metrics.widthPixels <= 0) {
+            return;
         }
-        return new FrameLayout.LayoutParams(width, height, Gravity.CENTER);
+        int height = Math.round(GameConfig.WINDOW_WIDTH
+                * (metrics.heightPixels / (float) metrics.widthPixels));
+        GameConfig.setViewportHeight(height);
     }
 
     // ==================== 暂停 / 退出 ====================

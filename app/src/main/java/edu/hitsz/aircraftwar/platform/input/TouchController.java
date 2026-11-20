@@ -11,7 +11,7 @@ import edu.hitsz.aircraftwar.core.config.GameConfig;
  * <p>迁移说明：替代桌面版 {@code HeroController}（commit 50474cc，{@code MouseAdapter.mouseDragged}）。
  * 原实现只响应拖动，且坐标越界直接丢弃；这里保留"越界忽略"的语义，
  * 额外接受 {@code ACTION_DOWN}（手指刚落下就吸附，移动端手感更好），
- * 逻辑坐标仍是 512×768，屏幕坐标由 {@link Mapper} 换算，游戏内数值一律不改。
+ * 逻辑坐标仍是 512×视口高，屏幕坐标由 {@link Mapper} 换算，游戏内数值一律不改。
  *
  * @author hitsz
  */

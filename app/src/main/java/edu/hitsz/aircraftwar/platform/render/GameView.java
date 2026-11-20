@@ -22,7 +22,7 @@ import edu.hitsz.aircraftwar.platform.resource.ImageStore;
  * 这里改成**单一循环线程**：同一线程里先 {@code tick()} 再绘制，状态只被这一个线程改，
  * 不再有竞态。UI 线程只负责 start/pause 与把触摸坐标递进来。
  *
- * <p>坐标映射：逻辑画布固定 512×768，按等比缩放居中（letterbox），
+ * <p>坐标映射：逻辑画布宽固定 512、高按屏幕比例注入（见 {@link GameConfig#WINDOW_HEIGHT}），
  * 触摸坐标反向换算，游戏内数值一律不改——这样不同分辨率手机上判定与桌面版一致。
  */
 public class GameView extends SurfaceView implements SurfaceHolder.Callback, Runnable, TouchController.Mapper {
@@ -37,7 +37,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     private GameLogic game;
     private TouchController touchController;
 
-    // 视口换算：surface 缓冲固定为 512×768，放大交给系统合成器；触摸用 viewScale 反算
+    // 视口换算：surface 按视口等比固定（宽度 ≤720），放大交给系统合成器；触摸用 viewScale 反算
     private float viewScale = 1f;
     private final float[] logicPoint = new float[2];
 
@@ -65,10 +65,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        // 关键：把 surface 缓冲固定成逻辑画布尺寸（512×768）。
-        // 这样每帧只写 0.39M 像素，放大由系统合成器完成，
-        // 比"画满整屏再缩放"省一个数量级的填充率（模拟器软件渲染下差别尤其明显）。
-        surfaceHolder.setFixedSize(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT);
+        // Surface 缓冲按视口比例固定，但宽度压到 720：铺满屏幕的同时，
+        // 每帧只写 720×1600 ≈ 1.15M 像素，而不是 1080×2400 ≈ 2.6M。
+        // S1 实测过"画满整屏"就是 12fps 的元凶，放大交给系统合成器最省。
+        int surfaceWidth = Math.max(GameConfig.WINDOW_WIDTH, Math.min(720, getWidth()));
+        int surfaceHeight = Math.round(surfaceWidth * (float) GameConfig.WINDOW_HEIGHT
+                / GameConfig.WINDOW_WIDTH);
+        surfaceHolder.setFixedSize(surfaceWidth, surfaceHeight);
         running = true;
         loopThread = new Thread(this, "game-loop");
         loopThread.start();
@@ -141,7 +144,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
         try {
             canvas = holder.lockCanvas();
             if (canvas != null && game != null) {
-                renderer.draw(canvas, game, 1f, 0f, 0f);
+                // Surface 宽度是 720、逻辑宽 512：缩放由渲染层一次性完成，不再有 letterbox 偏移
+                float scale = canvas.getWidth() / (float) GameConfig.WINDOW_WIDTH;
+                renderer.draw(canvas, game, scale, 0f, 0f);
             }
         } finally {
             if (canvas != null) {
@@ -151,7 +156,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Run
     }
 
     /**
-     * 触摸换算：视图坐标按 viewScale 折算回 512×768 逻辑坐标。
+     * 触摸换算：视图坐标按 viewScale 折算回 512×视口高 的逻辑坐标。
      * surface 缓冲是固定尺寸，与视图尺寸无关，所以不能用 surface 尺寸算。
      */
     private void updateViewport() {

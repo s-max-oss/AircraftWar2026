@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         gameAudio = new GameAudio(this);
     }
 
-    /** 游戏画面按 512×768 等比居中；系统栏隐藏，向上滑可临时唤出。 */
+    /** 游戏画面铺满整屏（视口按屏幕比例注入）；系统栏隐藏，向上滑可临时唤出。 */
     private void applyImmersiveMode() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         WindowInsetsControllerCompat controller =

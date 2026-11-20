@@ -61,7 +61,7 @@ public class EliteProEnemy extends EnemyAircraft {
         int speedY = this.getSpeedY();
         if (Math.random() < 0.8) {
             DropFactory factory = DropFactoryManager.getFactory("AddBullet");
-            res.add(factory.createDrop(x, y, speedX, speedY + 2));
+            res.add(factory.createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         }
         return res;
     }

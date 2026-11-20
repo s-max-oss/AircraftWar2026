@@ -64,16 +64,16 @@ public class ElitePlusEnemy extends EnemyAircraft {
         // 25% 概率掉 AddBulletPlus
         if (Math.random() < 0.25) {
             DropFactory factory = DropFactoryManager.getFactory("AddBulletPlus");
-            res.add(factory.createDrop(x, y, speedX, speedY + 2));
+            res.add(factory.createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else if (Math.random() < 0.5) {
             DropFactory factory = DropFactoryManager.getFactory("AddBullet");
-            res.add(factory.createDrop(x, y, speedX, speedY + 2));
+            res.add(factory.createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else if (Math.random() < 0.75) {
             DropFactory factory = DropFactoryManager.getFactory("Hp");
-            res.add(factory.createDrop(x, y, speedX, speedY + 2));
+            res.add(factory.createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         } else {
             DropFactory factory = DropFactoryManager.getFactory("Bomb");
-            res.add(factory.createDrop(x, y, speedX, speedY + 2));
+            res.add(factory.createDrop(x, y, speedX, speedY + GameConfig.scaledSpeed(2)));
         }
 
         return res;
