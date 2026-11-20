@@ -71,6 +71,11 @@ public final class GameConfig {
     public static final int BASE_ENEMY_POWER = 40;
     /** 英雄机基础火力，等级加成在此之上累加。 */
     public static final int HERO_POWER_BASE = 30;
+    /**
+     * 英雄机初始/重开时的血量上限。原桌面版把 100 写死在 {@code HeroAircraft} 构造器里，
+     * 重开时只重置 {@code hp = maxHp}，升级加过的上限会一直带下去（S2 修复）。
+     */
+    public static final int HERO_BASE_HP = 100;
     /** Boss 子弹威力。 */
     public static final int BOSS_BULLET_POWER = 40;
     /** 顶级精英敌机子弹威力。 */

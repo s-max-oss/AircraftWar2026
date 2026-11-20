@@ -55,7 +55,7 @@ public class HeroAircraft extends AbstractAircraft {
                     instance = new HeroAircraft(
                             GameConfig.WINDOW_WIDTH / 2,
                             GameConfig.WINDOW_HEIGHT - GameConfig.Sprite.HERO.height,
-                            0, 0, 100
+                            0, 0, GameConfig.HERO_BASE_HP
                     );
                 }
             }
@@ -89,6 +89,30 @@ public class HeroAircraft extends AbstractAircraft {
         this.shootStrategy = new ScatterShootStrategy(shootNum, power, direction);
         // 重置有效状态
         isValid = true;
+    }
+
+    /**
+     * "再来一局"用的完整重置：在 {@link #reset()} 之上把**升级涨过的血量上限**与
+     * 道具状态一起清掉。
+     *
+     * <p>为什么必须单独一个方法：桌面版重开走 {@code HeroAircraft.resetInstance()}，
+     * 靠"丢掉单例、下次 new 一个"来清 {@code maxHp}；而 Android 侧若也丢单例，
+     * {@code PlayerLevelManager} 缓存的 {@code hero} 引用会指向旧对象，升级就加到了死飞机上。
+     * 所以这里改成"不换实例、只清状态"。
+     *
+     * <p>另一处必须清：{@code powerUpTime}/{@code ringShootTime} 是绝对时间戳，
+     * 不清的话上一局的剩余时长会延续到新一局（表现为开局几秒内火力异常）。
+     *
+     * @author hitsz
+     */
+    public void resetForNewGame() {
+        maxHp = GameConfig.HERO_BASE_HP;
+        originalShootNum = 1;
+        originalPower = GameConfig.HERO_POWER_BASE;
+        powerUpTime = 0;
+        originalShootStrategy = null;
+        ringShootTime = 0;
+        reset();
     }
 
     public void increasePower(int increase) {

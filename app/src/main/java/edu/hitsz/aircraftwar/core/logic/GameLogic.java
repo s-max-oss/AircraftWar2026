@@ -94,7 +94,8 @@ public abstract class GameLogic implements BattleContext {
         this.initialDifficulty = initialDifficulty;
 
         heroAircraft = HeroAircraft.getInstance();
-        heroAircraft.reset();
+        // 重开要清的不只是 hp：maxHp（升级涨的）、道具剩余时长都在 HeroAircraft 里（S2 修）
+        heroAircraft.resetForNewGame();
 
         enemyAircrafts = new CopyOnWriteArrayList<>();
         heroBullets = new CopyOnWriteArrayList<>();
