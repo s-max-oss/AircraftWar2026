@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  游戏页（docs/12-UI设计方案.md §3.2）
+  GameView 由 GameFragment 在运行时 new 出来并塞进 gameContainer ——
+  SurfaceView 无法在 XML 里初始化（课件 p9「运行时实例化布局元素」正是这一条）。
+  画面按 512×768 等比居中，两侧/上下留黑；HUD 由 GameRenderer 直接画在 Canvas 上。
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <FrameLayout
+        android:id="@+id/gameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/btnPause"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="18dp"
+        android:background="@drawable/bg_pause_button"
+        android:contentDescription="@string/game_pause"
+        android:padding="11dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_pause" />
+
+    <!-- 暂停浮层：与系统返回键共用一套"继续 / 退出"选择 -->
+    <FrameLayout
+        android:id="@+id/pauseOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:letterSpacing="0.12"
+                android:text="@string/game_paused"
+                android:textColor="@color/text"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResume"
+                style="@style/Widget.AircraftWar.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="22dp"
+                android:text="@string/game_resume" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuit"
+                style="@style/Widget.AircraftWar.Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/game_quit" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

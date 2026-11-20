@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  页面流（docs/12-UI设计方案.md §2）：
+  menu → game → gameover；
+  gameover 的"再来一局 / 返回主菜单"用代码 popBackStack 实现，
+  不用 action —— 回退栈语义更直观，也能保证结算页不会留在栈里。
+-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menuFragment">
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="edu.hitsz.aircraftwar.ui.menu.MainMenuFragment"
+        android:label="@string/menu_title">
+
+        <action
+            android:id="@+id/action_menu_to_game"
+            app:destination="@id/gameFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="edu.hitsz.aircraftwar.ui.game.GameFragment"
+        android:label="@string/menu_start">
+
+        <!-- 字符串参数不写 defaultValue：Navigation 要求 string 的默认值必须是资源引用，
+             而 aapt2 会把 @string 就地展开成字面量，装载时直接抛 XmlPullParserException。
+             默认昵称在代码里兜底（GameFragment#createGame / GameOverFragment#onViewCreated）。 -->
+        <argument
+            android:name="playerName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="difficulty"
+            android:defaultValue="2"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_game_to_gameover"
+            app:destination="@id/gameoverFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gameoverFragment"
+        android:name="edu.hitsz.aircraftwar.ui.gameover.GameOverFragment"
+        android:label="@string/gameover_title">
+
+        <argument
+            android:name="playerName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="difficulty"
+            android:defaultValue="2"
+            app:argType="integer" />
+        <argument
+            android:name="score"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="kills"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="durationSec"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+</navigation>

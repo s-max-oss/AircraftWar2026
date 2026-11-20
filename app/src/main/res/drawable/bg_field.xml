@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 输入框 / 设置行的底：14dp 圆角 + 1dp 描边（docs/12 §4.3） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#12FFFFFF" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/line" />
+    <corners android:radius="14dp" />
+</shape>

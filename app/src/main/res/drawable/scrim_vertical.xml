@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 压暗层：保证任意背景图上白字都能读清（docs/12 §3.1） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#8C060B16"
+        android:centerColor="#B3060B16"
+        android:endColor="#E6060B16"
+        android:type="linear" />
+</shape>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 结算卡片：20dp 圆角 + 半透明面板（docs/12 §4.3） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/panel" />
+    <stroke
+        android:width="1dp"
+        android:color="#339FB0CC" />
+    <corners android:radius="20dp" />
+</shape>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 暂停图标：两根圆角竖条。用 VectorDrawable 而不是 png，省 3 套密度资源 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/text"
+        android:pathData="M7,4h3.2v16H7zM13.8,4H17v16h-3.2z" />
+</vector>

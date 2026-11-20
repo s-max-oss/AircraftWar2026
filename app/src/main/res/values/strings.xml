@@ -1,3 +1,43 @@
 <resources>
     <string name="app_name">AircraftWar2026</string>
+
+    <!-- ===== 主菜单 ===== -->
+    <string name="menu_title">飞机大战</string>
+    <string name="menu_subtitle">AIRCRAFT WAR · 2026</string>
+    <string name="menu_player_label">玩家昵称</string>
+    <string name="menu_player_hint">玩家</string>
+    <string name="menu_default_player">玩家</string>
+    <string name="menu_difficulty_label">难度</string>
+    <string name="menu_difficulty_simple">简单</string>
+    <string name="menu_difficulty_normal">普通</string>
+    <string name="menu_difficulty_hard">困难</string>
+    <string name="menu_difficulty_desc_simple">不召唤 Boss，难度不随时间提升</string>
+    <string name="menu_difficulty_desc_normal">30 秒起提升难度，Boss 血量固定</string>
+    <string name="menu_difficulty_desc_hard">20 秒起提升难度，Boss 血量随召唤递增</string>
+    <string name="menu_music">背景音乐与音效</string>
+    <string name="menu_music_desc">关闭后 BGM 与音效同时静音，设置会保留</string>
+    <string name="menu_start">开始游戏</string>
+    <string name="menu_records">游戏记录 · S3</string>
+    <string name="menu_ranking">排行榜 · S3</string>
+    <string name="menu_footer">v1.0 · 按返回键退出</string>
+
+    <!-- ===== 游戏页 ===== -->
+    <string name="game_pause">暂停</string>
+    <string name="game_paused">已暂停</string>
+    <string name="game_resume">继续游戏</string>
+    <string name="game_quit">退出到主菜单</string>
+    <string name="game_view_desc">游戏画面</string>
+
+    <!-- ===== 结算页 ===== -->
+    <string name="gameover_title">游戏结束</string>
+    <string name="gameover_subtitle">GAME OVER</string>
+    <string name="gameover_score_label">最终得分</string>
+    <string name="gameover_kills">击杀敌机</string>
+    <string name="gameover_duration">存活时长</string>
+    <string name="gameover_difficulty">难度</string>
+    <string name="gameover_kills_value">%1$d 架</string>
+    <string name="gameover_duration_value">%1$d 分 %2$d 秒</string>
+    <string name="gameover_restart">再来一局</string>
+    <string name="gameover_back">返回主菜单</string>
+    <string name="gameover_ranking_hint">排行榜 · S3 接入</string>
 </resources>

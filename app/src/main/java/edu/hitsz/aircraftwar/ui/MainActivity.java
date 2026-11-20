@@ -1,135 +1,70 @@
 package edu.hitsz.aircraftwar.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
-import edu.hitsz.aircraftwar.core.config.GameConfig;
-import edu.hitsz.aircraftwar.core.logic.GameEvents;
-import edu.hitsz.aircraftwar.core.logic.GameLogic;
-import edu.hitsz.aircraftwar.core.logic.NormalGame;
-import edu.hitsz.aircraftwar.platform.render.GameView;
+import edu.hitsz.aircraftwar.R;
+import edu.hitsz.aircraftwar.platform.audio.GameAudio;
 
 /**
- * 游戏页：全屏宿主 {@link GameView}。
+ * 单 Activity 宿主：三页由 Navigation 换成 Fragment（AGENTS §2 决策 9）。
  *
- * <p>S1 只做"能跑起来"：难度固定为普通、音效走日志占位（S2 接 {@code SoundPool/MediaPlayer}）、
- * 结算暂不跳页（S2 加 {@code GameOverFragment}）。这样 S1 的 DoD（下落/拖动/碰撞计分）
- * 可以独立于音效与导航验证。
+ * <p>迁移说明：S1 的 MainActivity 直接 {@code new GameView(this)} 承载游戏画面；
+ * S2 起画面下沉到 {@code ui/game/GameFragment}，本类只剩两件事：沉浸式全屏 + 持有音频实例。
+ *
+ * <p>为什么音频放在 Activity 而不是 Fragment：{@link GameAudio} 里有两个 9MB 的
+ * {@code MediaPlayer} 和一个 {@code SoundPool}。若挂在游戏页上，每次"结算 → 再来一局"
+ * 都要重建一遍（还会在结算音还没播完时被 release 掐断）；挂在 Activity 上则一次创建、
+ * 全程唯一，这同时也是"切后台不叠音"的结构性保证——**全局只有一套播放器**。
+ * 释放点在 {@link #onDestroy()}，与进程同生共死。
  */
-public class MainActivity extends AppCompatActivity implements GameEvents {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "AircraftWar";
-
-    private GameView gameView;
-    private GameLogic game;
+    private GameAudio gameAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        applyImmersiveMode();
+        setContentView(R.layout.activity_main);
+        gameAudio = new GameAudio(this);
+    }
 
-        // 全屏沉浸：游戏画面按 512×768 等比缩放居中，系统栏隐藏
+    /** 游戏画面按 512×768 等比居中；系统栏隐藏，向上滑可临时唤出。 */
+    private void applyImmersiveMode() {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         controller.hide(WindowInsetsCompat.Type.systemBars());
         controller.setSystemBarsBehavior(
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-
-        gameView = new GameView(this);
-        setContentView(buildRoot());
-
-        game = new NormalGame("玩家", this);
-        gameView.setGame(game);
-        game.start();
     }
 
-    /**
-     * 布局：黑底 + 按 512:768 居中的 GameView。
-     *
-     * <p>为什么要手动算宽高：GameView 的 Surface 缓冲被固定成 512×768（省填充率），
-     * 视图若与之一致就不会被拉伸；屏幕比例不同时用黑边补，而不是把画面拉变形。
-     */
-    private View buildRoot() {
-        FrameLayout root = new FrameLayout(this);
-        root.setBackgroundColor(Color.BLACK);
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int viewWidth = metrics.widthPixels;
-        int viewHeight = (int) (viewWidth * (float) GameConfig.WINDOW_HEIGHT / GameConfig.WINDOW_WIDTH);
-        if (viewHeight > metrics.heightPixels) {
-            viewHeight = metrics.heightPixels;
-            viewWidth = (int) (viewHeight * (float) GameConfig.WINDOW_WIDTH / GameConfig.WINDOW_HEIGHT);
-        }
-
-        FrameLayout.LayoutParams params =
-                new FrameLayout.LayoutParams(viewWidth, viewHeight, Gravity.CENTER);
-        root.addView(gameView, params);
-        return root;
+    /** 全局唯一的音频门面。三个 Fragment 都从这里取，禁止各自 new。 */
+    public GameAudio audio() {
+        return gameAudio;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        gameView.pause();
+        // 切后台：BGM 暂停并交还音频焦点（AGENTS §8 生命周期）
+        gameAudio.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        gameView.resume();
-    }
-
-    // ==================== GameEvents：S1 只用日志验证时序 ====================
-
-    @Override
-    public void onBgmStart() {
-        Log.i(TAG, "event: bgm start（S2 接 MediaPlayer）");
+        gameAudio.onResume();
     }
 
     @Override
-    public void onHit() {
-        // 每次命中都打日志会刷屏，S1 静默，S2 接 SoundPool
-    }
-
-    @Override
-    public void onPowerUp() {
-        Log.i(TAG, "event: power up");
-    }
-
-    @Override
-    public void onBomb() {
-        Log.i(TAG, "event: bomb");
-    }
-
-    @Override
-    public void onLevelUp(int level, int hpBonus, int powerBonus) {
-        Log.i(TAG, "event: level up -> " + level + " hp+" + hpBonus + " power+" + powerBonus);
-    }
-
-    @Override
-    public void onBossBgmStart() {
-        Log.i(TAG, "event: boss bgm start");
-    }
-
-    @Override
-    public void onBossBgmStop() {
-        Log.i(TAG, "event: boss bgm stop");
-    }
-
-    @Override
-    public void onGameOver() {
-        Log.i(TAG, "event: game over, score=" + game.getScore()
-                + " kills=" + game.getEnemiesKilled()
-                + " difficulty=" + game.getDifficultyLevel());
+    protected void onDestroy() {
+        gameAudio.release();
+        super.onDestroy();
     }
 }

@@ -30,6 +30,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildFeatures {
+        // 三页布局全走 ViewBinding：XML 控件与 Fragment 字段一一对应，findViewById 一处不写
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -37,6 +42,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    // 单 Activity + Navigation：三页流转与回退栈交给 NavController（AGENTS §2 决策 9）
+    implementation(libs.navigation.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

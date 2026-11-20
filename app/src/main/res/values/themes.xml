@@ -1,9 +1,53 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AircraftWar" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- 三页都是深色设计（docs/12 §4.1），固定用 Dark 主题，避免系统浅色模式下配色跑偏 -->
+    <style name="Base.Theme.AircraftWar" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/text</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorOnSecondary">@color/bg_deep</item>
+        <item name="colorSurface">@color/panel</item>
+        <item name="colorOnSurface">@color/text</item>
+        <item name="android:colorBackground">@color/bg_deep</item>
+        <item name="android:windowBackground">@color/bg_deep</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.AircraftWar" parent="Base.Theme.AircraftWar" />
+
+    <!-- 主按钮：蓝底、54dp、14dp 圆角（docs/12 §4.3/§4.4） -->
+    <style name="Widget.AircraftWar.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:minHeight">54dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+
+    <!-- 次按钮：描边、透明底 -->
+    <style name="Widget.AircraftWar.Button.Ghost" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">54dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/text_dim</item>
+        <item name="strokeColor">@color/line</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">14dp</item>
+    </style>
+
+    <!-- 难度分段按钮：默认态即"未选中"，选中态由代码改 tint/stroke -->
+    <style name="Widget.AircraftWar.Button.Segment" parent="Widget.AircraftWar.Button.Ghost">
+        <item name="android:minHeight">58dp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:textColor">@color/text_dim</item>
+    </style>
 </resources>

@@ -2,4 +2,20 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- ===== S2 视觉规范，见 docs/12-UI设计方案.md §4.1 ===== -->
+    <color name="bg_deep">#FF0B1220</color>
+    <color name="panel">#DB0F172A</color>
+    <color name="primary">#FF2F6FE4</color>
+    <color name="primary_press">#FF2457B8</color>
+    <!-- 难度选中态底色（主色 36% 透明）：比纯色底轻，不抢文字 -->
+    <color name="primary_selected_bg">#5C2F6FE4</color>
+    <color name="accent">#FFFFC24B</color>
+    <color name="danger">#FFE5484D</color>
+    <color name="ok">#FF3DD68C</color>
+    <color name="text">#FFF4F7FF</color>
+    <color name="text_dim">#FF9FB0CC</color>
+    <color name="text_disabled">#FF63748F</color>
+    <color name="line">#479FB0CC</color>
+    <color name="scrim">#B3060B16</color>
 </resources>
