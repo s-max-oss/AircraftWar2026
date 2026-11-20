@@ -1,5 +1,7 @@
 *.iml
 .gradle
+# 整目录忽略：AGENTS.md §11 要求，避免 .idea/.name 这类零碎文件挂在工作区
+.idea/
 /local.properties
 /.idea/caches
 /.idea/libraries
