@@ -9,7 +9,7 @@ import edu.hitsz.aircraftwar.core.config.GameConfig;
  * <p>迁移说明：来自 {@code edu.hitsz.basic.AbstractFlyingObject}（commit 50474cc）。
  * 唯一改动是去掉 {@code BufferedImage image} / {@code getImage()} / {@code paint(Graphics)}：
  * 绘制属于平台层，逻辑层只声明"我长什么样"（{@link #getSprite()}），图片由
- * {@code platform/render} 按精灵取。宽高同理，改由 {@link GameConfig.Sprite} 提供，
+ * {@code platform/render} 按标识取。宽高同理，改由 {@link GameConfig.Sprite} 提供，
  * 这样碰撞判定不必碰 {@code java.awt}。
  *
  * @author hitsz
@@ -24,10 +24,10 @@ public abstract class AbstractFlyingObject {
     protected int speedX;
     protected int speedY;
 
-    // x 轴长度，根据精灵尺寸获得, -1 表示未设置
+    // x 轴长度，根据图片尺寸获得, -1 表示未设置
     protected int width = -1;
 
-    // y 轴长度，根据精灵尺寸获得, -1 表示未设置
+    // y 轴长度，根据图片尺寸获得, -1 表示未设置
     protected int height = -1;
 
     // 有效（生存）标记，标记为 false 的对象会在下次刷新时清除
@@ -44,9 +44,9 @@ public abstract class AbstractFlyingObject {
     }
 
     /**
-     * 本对象使用的精灵。桌面版靠类名反查图片，Android 侧由平台层按精灵取 Bitmap。
+     * 本对象使用的素材。桌面版靠类名反查图片，Android 侧由平台层按标识取 Bitmap。
      *
-     * @return 该对象的精灵标识
+     * @return 该对象的素材标识
      */
     public abstract GameConfig.Sprite getSprite();
 

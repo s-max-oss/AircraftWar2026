@@ -14,7 +14,7 @@ import java.util.List;
  * 环形射击策略：子弹以自身为中心环形散开（Boss 与超级火力）。
  *
  * <p>迁移说明：来自 {@code edu.hitsz.strategy.RingShootStrategy}（commit 50474cc），
- * 子弹速度 5、按精灵半宽/半高外扩的公式原样保留。
+ * 子弹速度 5、按机身半宽/半高外扩的公式原样保留。
  */
 public class RingShootStrategy implements ShootStrategy {
 

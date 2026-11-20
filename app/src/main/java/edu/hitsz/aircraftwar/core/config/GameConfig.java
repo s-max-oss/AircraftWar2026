@@ -6,7 +6,7 @@ package edu.hitsz.aircraftwar.core.config;
  * <p>数值全部照抄迁移源 commit 50474cc，未改动任何平衡参数：逻辑层只依赖这里的数值，
  * 不再反向 import 桌面版的 {@code Main} / {@code ImageManager}。
  *
- * <p>为什么精灵尺寸也在这里：迁移源用 {@code ImageManager.*_IMAGE.getWidth()} 算敌人出生 x 坐标，
+ * <p>为什么图片尺寸也在这里：迁移源用 {@code ImageManager.*_IMAGE.getWidth()} 算敌人出生 x 坐标，
  * 把 {@code java.awt.image.BufferedImage} 带进了逻辑层。Android 侧图片由 {@code platform}
  * 注入，逻辑层只需要知道"这张图多大"，所以尺寸进常量、图片对象不进 core。
  *
@@ -29,7 +29,7 @@ public final class GameConfig {
     /** 逻辑帧间隔（毫秒）。桌面版 {@code Timer(40ms)}，Android 渲染线程沿用同一节拍。 */
     public static final int TICK_MS = 40;
 
-    // ==================== 精灵尺寸 ====================
+    // ==================== 图片尺寸 ====================
 
     /**
      * 19 张资源图的原始像素尺寸，必须与 {@code res/drawable-nodpi/} 里的文件一致：

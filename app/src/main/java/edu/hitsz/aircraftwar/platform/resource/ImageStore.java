@@ -29,9 +29,9 @@ public final class ImageStore {
     }
 
     /**
-     * 取精灵对应的位图（带缓存）。
+     * 取素材对应的位图（带缓存）。
      *
-     * @param sprite 精灵标识
+     * @param sprite 素材标识
      * @return 解码后的位图
      */
     public Bitmap get(GameConfig.Sprite sprite) {
@@ -47,7 +47,7 @@ public final class ImageStore {
     }
 
     /**
-     * 精灵到 drawable 的映射。注意资源名不能有大写字母，
+     * 素材到 drawable 的映射。注意资源名不能有大写字母，
      * 因此源图的 {@code elitePlus.png} / {@code elitePro.png} / {@code prop_bulletPlus.png}
      * 落位时改名为 {@code elite_plus.png} / {@code elite_pro.png} / {@code prop_bullet_plus.png}。
      */
@@ -84,7 +84,7 @@ public final class ImageStore {
             case PROP_FREEZE:
                 return R.drawable.prop_freeze;
             default:
-                throw new IllegalArgumentException("未映射的精灵: " + sprite);
+                throw new IllegalArgumentException("未映射的素材: " + sprite);
         }
     }
 

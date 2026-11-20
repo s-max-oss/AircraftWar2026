@@ -13,7 +13,7 @@ import java.util.List;
  * 英雄飞机，游戏玩家操控。
  *
  * <p>迁移说明：来自 {@code edu.hitsz.aircraft.HeroAircraft}（commit 50474cc）。
- * 改动仅两处读数来源：窗口尺寸与精灵高度改为 {@link GameConfig}，基础火力取
+ * 改动仅两处读数来源：窗口尺寸与图片高度改为 {@link GameConfig}，基础火力取
  * {@link GameConfig#HERO_POWER_BASE}；单例、火力道具计时、环形弹幕等逻辑一字未动。
  *
  * @author hitsz
