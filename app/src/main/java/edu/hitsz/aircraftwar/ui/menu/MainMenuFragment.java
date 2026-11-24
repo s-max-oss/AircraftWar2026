@@ -1,18 +1,15 @@
 package edu.hitsz.aircraftwar.ui.menu;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-
-import com.google.android.material.button.MaterialButton;
 
 import edu.hitsz.aircraftwar.R;
 import edu.hitsz.aircraftwar.databinding.FragmentMenuBinding;
@@ -26,8 +23,7 @@ import edu.hitsz.aircraftwar.ui.game.GameFragment;
  * 难度是**三档**（简单/普通/困难），与桌面版 {@code MainMenuPanel} 的
  * {@code JComboBox} 一一对应；游戏内 1–5 级是随时间提升的难度，不是这里的档位。
  *
- * <p>"游戏记录 / 排行榜"按钮先置灰：数据层属实验四（S3），现在点进去只能是空列表，
- * 与其做假页面，不如留一个可解释的占位（docs/12 §1）。
+ * <p>记录与排行榜在功能接入前不展示入口，避免把开发阶段标记暴露给玩家。
  */
 public class MainMenuFragment extends Fragment {
 
@@ -46,10 +42,12 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 音乐开关（课件 p3 第 3 项）：状态取自全局音频实例，写入 SharedPreferences
-        binding.switchMusic.setChecked(audio().isMusicEnabled());
-        binding.switchMusic.setOnCheckedChangeListener((buttonView, isChecked) ->
-                audio().setMusicEnabled(isChecked));
+        // 图标按钮仍控制同一份持久化设置，音频行为不变。
+        updateMusicButton();
+        binding.switchMusic.setOnClickListener(v -> {
+            audio().setMusicEnabled(!audio().isMusicEnabled());
+            updateMusicButton();
+        });
 
         binding.btnSimple.setOnClickListener(v -> selectDifficulty(GameFragment.DIFFICULTY_SIMPLE));
         binding.btnNormal.setOnClickListener(v -> selectDifficulty(GameFragment.DIFFICULTY_NORMAL));
@@ -67,7 +65,15 @@ public class MainMenuFragment extends Fragment {
         return activity().audio();
     }
 
-    /** 选中态 = 底色 + 描边 + 字色 三重变化，不只靠颜色（docs/12 §8）。 */
+    private void updateMusicButton() {
+        boolean enabled = audio().isMusicEnabled();
+        binding.switchMusic.setImageResource(enabled ? R.drawable.ic_music : R.drawable.ic_music_off);
+        binding.switchMusic.setContentDescription(getString(enabled
+                ? R.string.menu_music_on : R.string.menu_music_off));
+        binding.switchMusic.setSelected(enabled);
+    }
+
+    /** 选中态同时改变底色和可访问性状态。 */
     private void selectDifficulty(int difficulty) {
         selectedDifficulty = difficulty;
         applySegment(binding.btnSimple, difficulty == GameFragment.DIFFICULTY_SIMPLE);
@@ -76,13 +82,9 @@ public class MainMenuFragment extends Fragment {
         binding.textDifficultyDesc.setText(descriptionOf(difficulty));
     }
 
-    private void applySegment(MaterialButton button, boolean selected) {
-        button.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
-                selected ? R.color.primary_selected_bg : android.R.color.transparent)));
-        button.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(),
-                selected ? R.color.primary : R.color.line)));
-        button.setTextColor(ContextCompat.getColor(requireContext(),
-                selected ? R.color.text : R.color.text_dim));
+    private void applySegment(TextView button, boolean selected) {
+        button.setBackgroundResource(selected ? R.drawable.bg_arcade_selected : R.drawable.bg_arcade_pill);
+        button.setSelected(selected);
     }
 
     private int descriptionOf(int difficulty) {

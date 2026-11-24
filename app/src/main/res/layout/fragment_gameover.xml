@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 结算页（docs/12-UI设计方案.md §3.3）：数据全部来自 Bundle，页面上不做任何计算 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_deep">
+    android:background="@color/arcade_paper">
 
     <ImageView
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/scrim_vertical" />
+        android:background="@drawable/bg_arcade_wash" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,133 +26,160 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingHorizontal="32dp"
-            android:paddingTop="52dp"
-            android:paddingBottom="24dp">
+            android:paddingHorizontal="22dp"
+            android:paddingTop="46dp"
+            android:paddingBottom="18dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:letterSpacing="0.10"
+                android:shadowColor="@color/arcade_ink"
+                android:shadowDx="2"
+                android:shadowDy="3"
+                android:shadowRadius="1"
                 android:text="@string/gameover_title"
-                android:textColor="@color/text"
-                android:textSize="34sp"
+                android:textColor="@color/arcade_yellow"
+                android:textSize="40sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/arcade_ink"
                 android:gravity="center"
-                android:letterSpacing="0.32"
+                android:letterSpacing="0.18"
+                android:paddingHorizontal="15dp"
                 android:text="@string/gameover_subtitle"
-                android:textColor="@color/text_dim"
-                android:textSize="12sp" />
+                android:textColor="@color/arcade_paper_light"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_arcade_card"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:paddingHorizontal="18dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="27dp">
+
+                <TextView
+                    android:id="@+id/textPlayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/arcade_ink_soft"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:letterSpacing="0.16"
+                    android:letterSpacing="0.12"
                     android:text="@string/gameover_score_label"
-                    android:textColor="@color/text_dim"
-                    android:textSize="13sp" />
+                    android:textColor="@color/arcade_ink_soft"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textScore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:gravity="center"
+                    android:includeFontPadding="false"
                     android:text="0"
-                    android:textColor="@color/accent"
-                    android:textSize="66sp"
+                    android:textColor="@color/arcade_orange"
+                    android:textSize="74sp"
                     android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="18dp"
-                    android:background="@color/line" />
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/arcade_ink" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
+                    android:layout_marginTop="18dp"
+                    android:orientation="horizontal">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/gameover_kills"
-                        android:textColor="@color/text_dim"
-                        android:textSize="15sp" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameover_kills"
+                            android:textColor="@color/arcade_ink_soft"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textKills"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/arcade_ink"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textKills"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/gameover_duration"
-                        android:textColor="@color/text_dim"
-                        android:textSize="15sp" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameover_duration"
+                            android:textColor="@color/arcade_ink_soft"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/arcade_ink"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textDuration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingVertical="6dp">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/gameover_difficulty"
-                        android:textColor="@color/text_dim"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/textDifficulty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/text"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameover_difficulty"
+                            android:textColor="@color/arcade_ink_soft"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textDifficulty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/arcade_ink"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -162,30 +188,33 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/btnRestart"
-                style="@style/Widget.AircraftWar.Button.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="28dp"
-                android:text="@string/gameover_restart" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnBackMenu"
-                style="@style/Widget.AircraftWar.Button.Ghost"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/gameover_back" />
+                android:layout_height="72dp"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/bg_arcade_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/gameover_restart"
+                android:textColor="@color/arcade_ink"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/btnBackMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_arcade_pill"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
-                android:text="@string/gameover_ranking_hint"
-                android:textColor="@color/text_disabled"
-                android:textSize="11sp" />
+                android:text="@string/gameover_back"
+                android:textColor="@color/arcade_ink"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

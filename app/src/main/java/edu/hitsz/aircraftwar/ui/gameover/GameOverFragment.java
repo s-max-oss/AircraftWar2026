@@ -58,6 +58,7 @@ public class GameOverFragment extends Fragment {
         }
 
         binding.textScore.setText(String.valueOf(score));
+        binding.textPlayer.setText(getString(R.string.gameover_player, playerName));
         binding.textKills.setText(getString(R.string.gameover_kills_value, kills));
         binding.textDuration.setText(getString(R.string.gameover_duration_value,
                 durationSec / 60, durationSec % 60));

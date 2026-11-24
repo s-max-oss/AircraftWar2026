@@ -18,4 +18,15 @@
     <color name="text_disabled">#FF63748F</color>
     <color name="line">#479FB0CC</color>
     <color name="scrim">#B3060B16</color>
+    <!-- UI 专项：与战场素材一致的明亮街机色板 -->
+    <color name="arcade_ink">#FF22304A</color>
+    <color name="arcade_ink_soft">#FF4C5D78</color>
+    <color name="arcade_paper">#FFFFF8E6</color>
+    <color name="arcade_paper_light">#FFFFFDF6</color>
+    <color name="arcade_yellow">#FFFFC94D</color>
+    <color name="arcade_orange">#FFF0A92B</color>
+    <color name="arcade_blue">#FF70B7FF</color>
+    <color name="arcade_green">#FF5FC24A</color>
+    <color name="arcade_scrim">#990C1930</color>
+    <color name="hud_scrim">#B522304A</color>
 </resources>

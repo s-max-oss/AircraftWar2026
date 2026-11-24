@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  游戏页（docs/12-UI设计方案.md §3.2）
-  GameView 由 GameFragment 在运行时 new 出来并塞进 gameContainer ——
-  SurfaceView 无法在 XML 里初始化（课件 p9「运行时实例化布局元素」正是这一条）。
-  画面按 512×768 等比居中，两侧/上下留黑；HUD 由 GameRenderer 直接画在 Canvas 上。
--->
+<!-- 游戏画面始终铺满；暂停层仅在暂停时显示，不参与战场触摸。 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,59 +12,148 @@
 
     <ImageButton
         android:id="@+id/btnPause"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="18dp"
         android:background="@drawable/bg_pause_button"
         android:contentDescription="@string/game_pause"
-        android:padding="11dp"
+        android:padding="12dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_pause" />
 
-    <!-- 暂停浮层：与系统返回键共用一套"继续 / 退出"选择 -->
     <FrameLayout
         android:id="@+id/pauseOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/scrim"
+        android:background="@color/arcade_scrim"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone">
 
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/bg_card"
+            android:layout_marginHorizontal="24dp"
+            android:background="@drawable/bg_arcade_card"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingHorizontal="22dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="29dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:letterSpacing="0.12"
                 android:text="@string/game_paused"
-                android:textColor="@color/text"
-                android:textSize="24sp"
+                android:textColor="@color/arcade_ink"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnResume"
-                style="@style/Widget.AircraftWar.Button.Primary"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="22dp"
-                android:text="@string/game_resume" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnQuit"
-                style="@style/Widget.AircraftWar.Button.Ghost"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/game_pause_score"
+                        android:textColor="@color/arcade_ink_soft"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/textPauseScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="0"
+                        android:textColor="@color/arcade_ink"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/game_pause_kills"
+                        android:textColor="@color/arcade_ink_soft"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/textPauseKills"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="0"
+                        android:textColor="@color/arcade_ink"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/game_pause_difficulty"
+                        android:textColor="@color/arcade_ink_soft"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/textPauseDifficulty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/menu_difficulty_normal"
+                        android:textColor="@color/arcade_ink"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnResume"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/game_quit" />
+                android:layout_height="66dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/bg_arcade_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/game_resume"
+                android:textColor="@color/arcade_ink"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnQuit"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/bg_arcade_pill"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/game_quit"
+                android:textColor="@color/arcade_ink"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>

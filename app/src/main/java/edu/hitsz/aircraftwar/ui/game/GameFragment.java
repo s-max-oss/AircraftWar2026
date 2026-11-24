@@ -26,6 +26,7 @@ import edu.hitsz.aircraftwar.databinding.FragmentGameBinding;
 import edu.hitsz.aircraftwar.platform.audio.GameAudio;
 import edu.hitsz.aircraftwar.platform.render.GameView;
 import edu.hitsz.aircraftwar.ui.MainActivity;
+import edu.hitsz.aircraftwar.ui.common.DifficultyLabels;
 
 /**
  * 游戏页：把 S1 的 {@code MainActivity} 内容（SurfaceView 组装 + 逻辑实例）搬成一个 Fragment。
@@ -149,12 +150,15 @@ public class GameFragment extends Fragment implements GameEvents {
     // ==================== 暂停 / 退出 ====================
 
     private void openPauseMenu() {
-        if (paused || gameOverHandled) {
+        if (paused || gameOverHandled || game.isGameOver()) {
             return;
         }
         paused = true;
         gameView.pause();
         audio().onPause();
+        binding.textPauseScore.setText(String.valueOf(game.getScore()));
+        binding.textPauseKills.setText(String.valueOf(game.getEnemiesKilled()));
+        binding.textPauseDifficulty.setText(DifficultyLabels.of(requireContext(), game.getInitialDifficulty()));
         binding.pauseOverlay.setVisibility(View.VISIBLE);
     }
 
@@ -256,6 +260,11 @@ public class GameFragment extends Fragment implements GameEvents {
     @Override
     public void onGameOver() {
         audio().playGameOver();
+        mainHandler.post(() -> {
+            if (binding != null) {
+                binding.btnPause.setVisibility(View.GONE);
+            }
+        });
         mainHandler.postDelayed(this::showGameOver, GAME_OVER_DELAY_MS);
     }
 

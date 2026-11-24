@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  主菜单（docs/12-UI设计方案.md §3.1）
-  层次：背景图 → 压暗层 → 可滚动内容。
-  为什么外面套 ScrollView：320dp 宽的小屏上三档难度 + 开关 + 双按钮会超出可视高度，
-  固定布局会被裁掉；ScrollView 只在小屏生效，设计稿比例靠 fillViewport + 权重保持。
--->
+<!-- UI 专项标题屏：背景与飞机沿用游戏素材；ScrollView 保证窄屏和输入法下可达。 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_deep">
+    android:background="@color/arcade_ink">
 
     <ImageView
         android:layout_width="match_parent"
@@ -17,12 +11,12 @@
         android:contentDescription="@null"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg" />
+        android:src="@drawable/bg2" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/scrim_vertical" />
+        android:background="@drawable/bg_arcade_wash" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,208 +27,208 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingHorizontal="32dp"
-            android:paddingTop="48dp"
-            android:paddingBottom="24dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:letterSpacing="0.12"
-                android:text="@string/menu_title"
-                android:textColor="@color/text"
-                android:textSize="46sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:letterSpacing="0.28"
-                android:text="@string/menu_subtitle"
-                android:textColor="@color/text_dim"
-                android:textSize="12sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="@string/menu_player_label"
-                android:textColor="@color/text_dim"
-                android:textSize="13sp" />
-
-            <EditText
-                android:id="@+id/inputPlayerName"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bg_field"
-                android:hint="@string/menu_player_hint"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:maxLength="12"
-                android:maxLines="1"
-                android:paddingHorizontal="16dp"
-                android:selectAllOnFocus="true"
-                android:textColor="@color/text"
-                android:textColorHint="@color/text_disabled"
-                android:textSize="16sp"
-                android:autofillHints=""
-                android:importantForAutofill="no" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="4dp"
-                android:text="@string/menu_difficulty_label"
-                android:textColor="@color/text_dim"
-                android:textSize="13sp" />
+            android:paddingHorizontal="20dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:baselineAligned="false"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSimple"
-                    style="@style/Widget.AircraftWar.Button.Segment"
+                <EditText
+                    android:id="@+id/inputPlayerName"
+                    android:layout_width="150dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_arcade_pill"
+                    android:hint="@string/menu_player_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:maxLength="12"
+                    android:maxLines="1"
+                    android:paddingHorizontal="17dp"
+                    android:selectAllOnFocus="true"
+                    android:singleLine="true"
+                    android:textColor="@color/arcade_ink"
+                    android:textColorHint="@color/arcade_ink_soft"
+                    android:textSize="14sp" />
+
+                <Space
                     android:layout_width="0dp"
-                    android:layout_height="58dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/switchMusic"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_arcade_pill"
+                    android:padding="13dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_music" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:shadowColor="@color/arcade_ink"
+                android:shadowDx="3"
+                android:shadowDy="5"
+                android:shadowRadius="2"
+                android:text="@string/menu_title"
+                android:textColor="@color/arcade_yellow"
+                android:textSize="52sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="2dp"
+                android:background="@color/arcade_ink"
+                android:gravity="center"
+                android:letterSpacing="0.15"
+                android:paddingHorizontal="14dp"
+                android:text="@string/menu_subtitle"
+                android:textColor="@color/arcade_paper_light"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="160dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center_vertical|start"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no"
+                    android:rotation="-12"
+                    android:src="@drawable/elite" />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no"
+                    android:rotation="12"
+                    android:src="@drawable/mob" />
+
+                <ImageView
+                    android:layout_width="260dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/hero" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:letterSpacing="0.15"
+                android:text="@string/menu_difficulty_hint"
+                android:textColor="@color/arcade_ink"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btnSimple"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:text="@string/menu_difficulty_simple" />
+                    android:background="@drawable/bg_arcade_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/menu_difficulty_simple"
+                    android:textColor="@color/arcade_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
+                <TextView
                     android:id="@+id/btnNormal"
-                    style="@style/Widget.AircraftWar.Button.Segment"
                     android:layout_width="0dp"
-                    android:layout_height="58dp"
+                    android:layout_height="match_parent"
                     android:layout_marginHorizontal="5dp"
                     android:layout_weight="1"
-                    android:text="@string/menu_difficulty_normal" />
+                    android:background="@drawable/bg_arcade_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/menu_difficulty_normal"
+                    android:textColor="@color/arcade_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
+                <TextView
                     android:id="@+id/btnHard"
-                    style="@style/Widget.AircraftWar.Button.Segment"
                     android:layout_width="0dp"
-                    android:layout_height="58dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:text="@string/menu_difficulty_hard" />
+                    android:background="@drawable/bg_arcade_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/menu_difficulty_hard"
+                    android:textColor="@color/arcade_ink"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textDifficultyDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="4dp"
-                android:text="@string/menu_difficulty_desc_normal"
-                android:textColor="@color/text_disabled"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="@color/arcade_ink_soft"
                 android:textSize="11sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/bg_field"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/menu_music"
-                        android:textColor="@color/text"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:text="@string/menu_music_desc"
-                        android:textColor="@color/text_disabled"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/switchMusic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:checked="true" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/btnStart"
-                style="@style/Widget.AircraftWar.Button.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="28dp"
-                android:text="@string/menu_start" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRecords"
-                    style="@style/Widget.AircraftWar.Button.Ghost"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:text="@string/menu_records"
-                    android:textSize="14sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRanking"
-                    style="@style/Widget.AircraftWar.Button.Ghost"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="6dp"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:text="@string/menu_ranking"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                android:layout_height="76dp"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_arcade_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/menu_start"
+                android:textColor="@color/arcade_ink"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_height="48dp"
                 android:gravity="center"
                 android:text="@string/menu_footer"
-                android:textColor="@color/text_disabled"
-                android:textSize="11sp" />
+                android:textColor="@color/arcade_ink"
+                android:textSize="12sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

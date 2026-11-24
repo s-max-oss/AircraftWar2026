@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 
 import edu.hitsz.aircraftwar.core.aircraft.AbstractAircraft;
+import edu.hitsz.aircraftwar.core.aircraft.Boss;
 import edu.hitsz.aircraftwar.core.aircraft.HeroAircraft;
 import edu.hitsz.aircraftwar.core.basic.AbstractFlyingObject;
 import edu.hitsz.aircraftwar.core.bullet.BaseBullet;
@@ -31,6 +32,13 @@ import edu.hitsz.aircraftwar.platform.resource.ImageStore;
  * 所以背景按"高度铺满、左右裁切"（centerCrop）画，战场向上下延伸，不再出现黑边。
  */
 public final class GameRenderer {
+
+    private static final int HUD_INK = Color.rgb(34, 48, 74);
+    private static final int HUD_PAPER = Color.rgb(255, 248, 230);
+    private static final int HUD_YELLOW = Color.rgb(255, 201, 77);
+    private static final int HUD_GREEN = Color.rgb(95, 194, 74);
+    private static final int HUD_BLUE = Color.rgb(112, 183, 255);
+    private static final int HUD_RED = Color.rgb(229, 72, 77);
 
     private final ImageStore images;
 
@@ -59,6 +67,7 @@ public final class GameRenderer {
         hudPaint.setTypeface(Typeface.DEFAULT_BOLD);
         hudPaint.setColor(Color.WHITE);
         hudPaint.setAntiAlias(true);
+        barPaint.setAntiAlias(true);
     }
 
     /**
@@ -176,39 +185,72 @@ public final class GameRenderer {
         HeroAircraft hero = game.getHeroAircraft();
         PlayerLevelManager level = game.getLevelManager();
 
-        hudPaint.setTextSize(18f);
-        canvas.drawText("分数: " + game.getScore(), 10, 25, hudPaint);
-        canvas.drawText("击杀: " + game.getEnemiesKilled(), 10, 50, hudPaint);
-        canvas.drawText("血量: " + hero.getHp(), 10, 75, hudPaint);
-        canvas.drawText("难度: " + game.getDifficultyName(game.getDifficultyLevel()),
-                GameConfig.WINDOW_WIDTH - 120, 25, hudPaint);
+        // 两块小底板只占顶部，不把游戏画面盖成表单。
+        barPaint.setColor(Color.argb(210, 255, 248, 230));
+        canvas.drawRoundRect(12, 12, 213, 91, 14, 14, barPaint);
+        canvas.drawRoundRect(299, 12, 500, 91, 14, 14, barPaint);
+        barPaint.setStyle(Paint.Style.STROKE);
+        barPaint.setStrokeWidth(2f);
+        barPaint.setColor(HUD_INK);
+        canvas.drawRoundRect(12, 12, 213, 91, 14, 14, barPaint);
+        canvas.drawRoundRect(299, 12, 500, 91, 14, 14, barPaint);
+        barPaint.setStyle(Paint.Style.FILL);
 
-        int rightPanelX = GameConfig.WINDOW_WIDTH - 150;
-        canvas.drawText("等级: " + level.getLevel(), rightPanelX, 50, hudPaint);
+        hudPaint.setColor(HUD_INK);
+        hudPaint.setTextSize(16f);
+        canvas.drawText("SCORE", 25, 31, hudPaint);
+        hudPaint.setTextSize(29f);
+        canvas.drawText(String.valueOf(game.getScore()), 25, 61, hudPaint);
+        hudPaint.setTextSize(15f);
+        canvas.drawText("击杀 " + game.getEnemiesKilled() + "  ·  "
+                + game.getDifficultyName(game.getDifficultyLevel()), 25, 80, hudPaint);
 
-        double speedBonus = level.getShootSpeedBonus();
-        if (speedBonus > 0) {
-            hudPaint.setTextSize(12f);
-            canvas.drawText("攻速+" + (int) (speedBonus * 100) + "%", rightPanelX, 65, hudPaint);
+        float hpFraction = hero.getMaxHp() <= 0 ? 0f
+                : Math.max(0f, Math.min(1f, hero.getHp() / (float) hero.getMaxHp()));
+        hudPaint.setTextSize(15f);
+        canvas.drawText("HP  " + hero.getHp() + "/" + hero.getMaxHp(), 312, 31, hudPaint);
+        drawBar(canvas, 312, 38, 175, 9, hpFraction, hpFraction < 0.3f ? HUD_RED : HUD_GREEN);
+        canvas.drawText("LV." + level.getLevel() + "  ·  EXP " + level.getExp()
+                + "/" + level.getCurrentThreshold(), 312, 64, hudPaint);
+        drawBar(canvas, 312, 71, 175, 7, (float) level.getExpProgress(), HUD_BLUE);
+
+        for (AbstractAircraft enemy : game.getEnemyAircrafts()) {
+            if (enemy instanceof Boss && !enemy.notValid()) {
+                float bossFraction = enemy.getMaxHp() <= 0 ? 0f
+                        : Math.max(0f, Math.min(1f, enemy.getHp() / (float) enemy.getMaxHp()));
+                barPaint.setColor(Color.argb(225, 34, 48, 74));
+                canvas.drawRoundRect(80, 105, 432, 132, 12, 12, barPaint);
+                drawBar(canvas, 89, 114, 334, 9, bossFraction, HUD_RED);
+                hudPaint.setColor(HUD_PAPER);
+                hudPaint.setTextSize(13f);
+                canvas.drawText("BOSS", 92, 129, hudPaint);
+                break;
+            }
         }
 
-        int expBarWidth = 120;
-        int expBarHeight = 8;
-        int expBarY = speedBonus > 0 ? 75 : 65;
-
-        barPaint.setColor(Color.argb(150, 50, 50, 50));
-        canvas.drawRect(rightPanelX, expBarY, rightPanelX + expBarWidth, expBarY + expBarHeight, barPaint);
-
-        barPaint.setColor(Color.rgb(0, 255, 0));
-        canvas.drawRect(rightPanelX, expBarY,
-                rightPanelX + (int) (expBarWidth * level.getExpProgress()), expBarY + expBarHeight, barPaint);
-
-        hudPaint.setTextSize(12f);
-        canvas.drawText(level.getExp() + "/" + level.getCurrentThreshold(), rightPanelX, expBarY + 20, hudPaint);
-
         if (game.isGameOver()) {
-            hudPaint.setTextSize(32f);
-            canvas.drawText("GAME OVER", 150, GameConfig.WINDOW_HEIGHT / 2f, hudPaint);
+            barPaint.setColor(Color.argb(150, 12, 25, 48));
+            canvas.drawRect(0, 0, GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT, barPaint);
+            hudPaint.setColor(HUD_YELLOW);
+            hudPaint.setTextAlign(Paint.Align.CENTER);
+            hudPaint.setTextSize(36f);
+            canvas.drawText("战斗结束", GameConfig.WINDOW_WIDTH / 2f,
+                    GameConfig.WINDOW_HEIGHT / 2f, hudPaint);
+            hudPaint.setTextAlign(Paint.Align.LEFT);
+        }
+    }
+
+    private void drawBar(Canvas canvas, float x, float y, float width, float height,
+                         float fraction, int fillColor) {
+        barPaint.setColor(HUD_INK);
+        canvas.drawRoundRect(x, y, x + width, y + height, height / 2, height / 2, barPaint);
+        barPaint.setColor(fillColor);
+        float inset = 2f;
+        float fillWidth = Math.max(0f, (width - 2 * inset) * Math.max(0f, Math.min(1f, fraction)));
+        if (fillWidth > 0f) {
+            canvas.drawRoundRect(x + inset, y + inset, x + inset + fillWidth,
+                    y + height - inset, (height - 2 * inset) / 2,
+                    (height - 2 * inset) / 2, barPaint);
         }
     }
 

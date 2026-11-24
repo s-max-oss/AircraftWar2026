@@ -17,9 +17,12 @@
     <string name="menu_music">背景音乐与音效</string>
     <string name="menu_music_desc">关闭后 BGM 与音效同时静音，设置会保留</string>
     <string name="menu_start">开始游戏</string>
-    <string name="menu_records">游戏记录 · S3</string>
-    <string name="menu_ranking">排行榜 · S3</string>
-    <string name="menu_footer">v1.0 · 按返回键退出</string>
+    <string name="menu_records">游戏记录</string>
+    <string name="menu_ranking">排行榜</string>
+    <string name="menu_footer">拖动战机 · 自动开火</string>
+    <string name="menu_music_on">关闭音乐与音效</string>
+    <string name="menu_music_off">开启音乐与音效</string>
+    <string name="menu_difficulty_hint">选择难度</string>
 
     <!-- ===== 游戏页 ===== -->
     <string name="game_pause">暂停</string>
@@ -27,11 +30,14 @@
     <string name="game_resume">继续游戏</string>
     <string name="game_quit">退出到主菜单</string>
     <string name="game_view_desc">游戏画面</string>
+    <string name="game_pause_score">本局得分</string>
+    <string name="game_pause_kills">击杀敌机</string>
+    <string name="game_pause_difficulty">难度</string>
 
     <!-- ===== 结算页 ===== -->
-    <string name="gameover_title">游戏结束</string>
-    <string name="gameover_subtitle">GAME OVER</string>
-    <string name="gameover_score_label">最终得分</string>
+    <string name="gameover_title">战斗结算</string>
+    <string name="gameover_subtitle">FLIGHT REPORT</string>
+    <string name="gameover_score_label">本局得分</string>
     <string name="gameover_kills">击杀敌机</string>
     <string name="gameover_duration">存活时长</string>
     <string name="gameover_difficulty">难度</string>
@@ -39,5 +45,5 @@
     <string name="gameover_duration_value">%1$d 分 %2$d 秒</string>
     <string name="gameover_restart">再来一局</string>
     <string name="gameover_back">返回主菜单</string>
-    <string name="gameover_ranking_hint">排行榜 · S3 接入</string>
+    <string name="gameover_player">飞行员 · %1$s</string>
 </resources>
