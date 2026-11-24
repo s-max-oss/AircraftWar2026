@@ -26,6 +26,7 @@ import edu.hitsz.aircraftwar.databinding.FragmentGameBinding;
 import edu.hitsz.aircraftwar.platform.audio.GameAudio;
 import edu.hitsz.aircraftwar.platform.render.GameView;
 import edu.hitsz.aircraftwar.ui.MainActivity;
+import edu.hitsz.aircraftwar.ui.common.ArcadeAccessibility;
 import edu.hitsz.aircraftwar.ui.common.DifficultyLabels;
 
 /**
@@ -79,6 +80,9 @@ public class GameFragment extends Fragment implements GameEvents {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ArcadeAccessibility.asButton(binding.btnResume);
+        ArcadeAccessibility.asButton(binding.btnQuit);
 
         // 先注入视口再建游戏：逻辑画布"长高"到屏幕比例，战场铺满、不再上下留黑
         applyViewport();

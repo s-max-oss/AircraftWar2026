@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import edu.hitsz.aircraftwar.R;
 import edu.hitsz.aircraftwar.databinding.FragmentGameoverBinding;
+import edu.hitsz.aircraftwar.ui.common.ArcadeAccessibility;
 import edu.hitsz.aircraftwar.ui.common.DifficultyLabels;
 import edu.hitsz.aircraftwar.ui.game.GameFragment;
 
@@ -44,6 +45,9 @@ public class GameOverFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ArcadeAccessibility.asButton(binding.btnRestart);
+        ArcadeAccessibility.asButton(binding.btnBackMenu);
 
         Bundle args = getArguments();
         int score = args == null ? 0 : args.getInt(GameFragment.GameOverArgs.SCORE, 0);

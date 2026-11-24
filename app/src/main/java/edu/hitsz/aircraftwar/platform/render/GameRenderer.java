@@ -210,8 +210,10 @@ public final class GameRenderer {
         hudPaint.setTextSize(15f);
         canvas.drawText("HP  " + hero.getHp() + "/" + hero.getMaxHp(), 312, 31, hudPaint);
         drawBar(canvas, 312, 38, 175, 9, hpFraction, hpFraction < 0.3f ? HUD_RED : HUD_GREEN);
-        canvas.drawText("LV." + level.getLevel() + "  ·  EXP " + level.getExp()
-                + "/" + level.getCurrentThreshold(), 312, 64, hudPaint);
+        canvas.drawText("LV." + level.getLevel() + "  ·  EXP", 312, 64, hudPaint);
+        hudPaint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(level.getExp() + "/" + level.getCurrentThreshold(), 487, 64, hudPaint);
+        hudPaint.setTextAlign(Paint.Align.LEFT);
         drawBar(canvas, 312, 71, 175, 7, (float) level.getExpProgress(), HUD_BLUE);
 
         for (AbstractAircraft enemy : game.getEnemyAircrafts()) {

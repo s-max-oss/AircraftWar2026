@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import edu.hitsz.aircraftwar.R;
 import edu.hitsz.aircraftwar.databinding.FragmentMenuBinding;
 import edu.hitsz.aircraftwar.ui.MainActivity;
+import edu.hitsz.aircraftwar.ui.common.ArcadeAccessibility;
 import edu.hitsz.aircraftwar.ui.game.GameFragment;
 
 /**
@@ -41,6 +42,11 @@ public class MainMenuFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        ArcadeAccessibility.asSingleChoice(binding.btnSimple);
+        ArcadeAccessibility.asSingleChoice(binding.btnNormal);
+        ArcadeAccessibility.asSingleChoice(binding.btnHard);
+        ArcadeAccessibility.asButton(binding.btnStart);
 
         // 图标按钮仍控制同一份持久化设置，音频行为不变。
         updateMusicButton();
