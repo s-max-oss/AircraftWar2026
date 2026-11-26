@@ -92,6 +92,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1">
 
+            <!-- 与排行榜同一套 ListView 复用；记录页多一个“清空”和 debug 造数入口。 -->
             <ListView
                 android:id="@+id/listRecords"
                 android:layout_width="match_parent"

@@ -39,6 +39,9 @@ public class GameOverViewModel extends ViewModel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public GameOverViewModel(RecordRepository repository, GameRecord record) {
+        // 先查旧最佳、再插入：顺序反了会把本局算进“历史最佳”，永远显示新纪录。
+        // 两步放在同一个单线程任务里，避免查询与插入竞态；ViewModel 旋转不重建，
+        // 所以配置变化不会重复插入（进程被杀重建的极端情况见 docs/05 §6）。
         executor.execute(() -> {
             int previousBest = 0;
             boolean saved = true;
@@ -56,11 +59,13 @@ public class GameOverViewModel extends ViewModel {
     }
 
     public LiveData<BestResult> bestResult() {
+        // 结算页只观察“最佳分/是否新纪录”，不直接碰数据库。
         return bestResult;
     }
 
     @Override
     protected void onCleared() {
+        // 用户立刻退出结算页时，已排队的入库任务仍允许跑完，不能丢成绩。
         executor.shutdown();
         super.onCleared();
     }

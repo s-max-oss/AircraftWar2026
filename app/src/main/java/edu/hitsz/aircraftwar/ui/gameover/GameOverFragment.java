@@ -81,14 +81,18 @@ public class GameOverFragment extends Fragment {
         long recordTime = args == null ? 0L
                 : args.getLong(GameFragment.GameOverArgs.RECORD_TIME, 0L);
         if (recordTime <= 0L) {
+            // 兼容旧导航参数：没有死亡时刻时退化为当前时间，保证 recordTime 可排序。
             recordTime = System.currentTimeMillis();
         }
+        // 页面只负责把 Bundle 参数拼成纯数据对象；查旧最佳、插入都在 ViewModel 的
+        // Executor 里做，主线程不碰数据库（AGENTS §8 线程约定）。
         GameRecord record = new GameRecord(0, playerName, score, kills, gameTimeMs,
                 recordTime, finalLevel, difficulty);
         RecordRepository repository = ((MainActivity) requireActivity()).records();
         viewModel = new ViewModelProvider(this,
                 new SimpleViewModelFactory(() -> new GameOverViewModel(repository, record)))
                 .get(GameOverViewModel.class);
+        // LiveData 只在该结算页可见时回调；旋转后 ViewModel 还在，不会重复入库。
         viewModel.bestResult().observe(getViewLifecycleOwner(), result -> {
             if (result == null) {
                 return;

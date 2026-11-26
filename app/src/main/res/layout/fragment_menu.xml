@@ -221,6 +221,7 @@
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
+            <!-- S3：记录/排行榜入口，沿用 v5 胶囊样式，不重画四页。 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

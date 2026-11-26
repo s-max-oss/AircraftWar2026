@@ -59,18 +59,21 @@ public class RecordFragment extends Fragment {
                 NavHostFragment.findNavController(this).popBackStack());
 
         RecordRepository repository = ((MainActivity) requireActivity()).records();
+        // 与排行榜同一套模式：Fragment 只观察 LiveData，查库在 ViewModel 的 Executor。
         viewModel = new ViewModelProvider(this,
                 new SimpleViewModelFactory(() -> new RecordViewModel(repository)))
                 .get(RecordViewModel.class);
 
         adapter = new RecordListAdapter(requireContext(), false, this::deleteRecord);
         binding.listRecords.setAdapter(adapter);
+        // 0 条时 ListView 自动显示空态；不要让 Adapter 自己造一行“暂无记录”。
         binding.listRecords.setEmptyView(binding.emptyState);
 
         viewModel.items().observe(getViewLifecycleOwner(), this::render);
         binding.btnClear.setOnClickListener(v -> confirmClear());
         binding.textCount.setText(getString(R.string.record_count, 0));
 
+        // 造数入口只在 debug 构建出现：release 包不暴露 1000 条测试数据按钮。
         if (isDebuggable()) {
             binding.btnSeed.setVisibility(View.VISIBLE);
             binding.btnSeed.setOnClickListener(v -> {
@@ -92,6 +95,8 @@ public class RecordFragment extends Fragment {
     }
 
     private void confirmClear() {
+        // 清空是破坏性操作（排行榜一起清），必须二次确认；MaterialAlertDialogBuilder 是
+        // Material 组件库对 AlertDialog 的封装，主题由 AppTheme 提供。
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.record_clear_title)
                 .setMessage(R.string.record_clear_message)
@@ -105,11 +110,13 @@ public class RecordFragment extends Fragment {
     }
 
     private boolean isDebuggable() {
+        // 不引入 BuildConfig：直接读 ApplicationInfo 的 FLAG_DEBUGGABLE，debug/release 都成立。
         return (requireContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     }
 
     @Override
     public void onDestroyView() {
+        // 与排行榜页同理：Fragment 视图销毁后不再持有 Binding / Adapter。
         binding = null;
         adapter = null;
         super.onDestroyView();

@@ -48,25 +48,39 @@ public class RecordListAdapter extends BaseAdapter {
     }
 
     public void submit(List<GameRecord> records) {
+        // Adapter 只负责“数据变了，通知列表刷新”；查询/排序在 ViewModel 的 Executor 里完成。
         items = records == null ? Collections.emptyList() : records;
         notifyDataSetChanged();
     }
 
+    /** BaseAdapter 四个必写方法之一：列表行数（课件 p8）。 */
     @Override
     public int getCount() {
         return items.size();
     }
 
+    /** 返回指定位置的数据；删除按钮的回调也靠它拿到 GameRecord。 */
     @Override
     public GameRecord getItem(int position) {
         return items.get(position);
     }
 
+    /** 主键来自 SQLite 的 _id；配合 hasStableIds=true，ListView 可保持选中/滚动位置。 */
     @Override
     public long getItemId(int position) {
         return items.get(position).getId();
     }
 
+    /** BaseAdapter 默认 false；我们的行 id 稳定，显式打开才能让 ListView 利用它。 */
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    /**
+     * 核心方法（课件 p9）：convertView 为空才 inflate，否则复用；ViewHolder 缓存行内控件；
+     * 每次都必须重新 setText/换背景，否则复用的行会带着上一行的数据。
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
@@ -117,6 +131,7 @@ public class RecordListAdapter extends BaseAdapter {
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 
+    /** 行内控件缓存；避免每次 getView 都 findViewById（课件 p9 的 ViewHolder 做法）。 */
     private static final class ViewHolder {
         final TextView rank;
         final TextView name;

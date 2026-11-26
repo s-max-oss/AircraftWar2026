@@ -154,6 +154,8 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1">
 
+            <!-- ListView + BaseAdapter；0 条时 setEmptyView 显示下面的空态，
+                 不在 Adapter 里塞一行假的“暂无记录”。 -->
             <ListView
                 android:id="@+id/listRanking"
                 android:layout_width="match_parent"

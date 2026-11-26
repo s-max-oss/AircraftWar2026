@@ -37,6 +37,7 @@ public class RecordViewModel extends ViewModel {
     }
 
     public LiveData<List<GameRecord>> items() {
+        // 页面只拿结果；Adapter 不碰 Cursor/数据库。
         return items;
     }
 
@@ -52,6 +53,7 @@ public class RecordViewModel extends ViewModel {
     }
 
     public void clearAll() {
+        // 清空后重新查一次，让页面看到真实的 0 条，而不是在 Adapter 里手动 clear。
         executor.execute(() -> {
             try {
                 repository.clear();
@@ -96,12 +98,14 @@ public class RecordViewModel extends ViewModel {
                 Log.e(TAG, "查询全部记录失败", e);
                 result = Collections.emptyList();
             }
+            // 后台线程不能 setValue；postValue 会切回主线程再通知观察者。
             items.postValue(result);
         });
     }
 
     @Override
     protected void onCleared() {
+        // 允许已排队的插入/删除跑完，避免页面退出时丢操作。
         executor.shutdown();
         super.onCleared();
     }

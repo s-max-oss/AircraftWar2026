@@ -292,6 +292,8 @@ public class GameFragment extends Fragment implements GameEvents {
         args.putInt(GameOverArgs.SCORE, game.getScore());
         args.putInt(GameOverArgs.KILLS, game.getEnemiesKilled());
         args.putInt(GameOverArgs.DURATION_SEC, (int) (game.getGameTime() / 1000L));
+        // finalLevel/gameTimeMs/recordTime 是 S3 记录用的原始数据；durationSec 只用于展示。
+        // recordTime 在这里取一次，旋转/重建结算页时沿用同一时间，不会变成另一条记录。
         args.putInt(GameOverArgs.FINAL_LEVEL, game.getDifficultyLevel());
         args.putLong(GameOverArgs.GAME_TIME_MS, game.getGameTime());
         args.putLong(GameOverArgs.RECORD_TIME, System.currentTimeMillis());

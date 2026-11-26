@@ -58,16 +58,20 @@ public class RankingFragment extends Fragment {
                 NavHostFragment.findNavController(this).popBackStack());
 
         RecordRepository repository = ((MainActivity) requireActivity()).records();
+        // ViewModel 跟着 Fragment 生命周期；LiveData 只在页面 STARTED 后回调，
+        // 旋转/回前台不会在主线程重新查库（查询在 ViewModel 的 Executor 里）。
         viewModel = new ViewModelProvider(this,
                 new SimpleViewModelFactory(() -> new RankingViewModel(repository)))
                 .get(RankingViewModel.class);
 
         adapter = new RecordListAdapter(requireContext(), true, this::deleteRecord);
         binding.listRanking.setAdapter(adapter);
+        // 0 条时 ListView 自动显示 emptyState（课件 p4 的“暂无记录”空态）。
         binding.listRanking.setEmptyView(binding.emptyState);
 
         viewModel.items().observe(getViewLifecycleOwner(), this::render);
 
+        // 四个胶囊对应 0/1/2/3；0 是“全部”，与 RecordRepository.ALL_DIFFICULTIES 一致。
         binding.chipAll.setOnClickListener(v -> selectFilter(RecordRepository.ALL_DIFFICULTIES));
         binding.chipSimple.setOnClickListener(v -> selectFilter(1));
         binding.chipNormal.setOnClickListener(v -> selectFilter(2));
@@ -87,6 +91,7 @@ public class RankingFragment extends Fragment {
     }
 
     private void renderFilter(int difficulty) {
+        // 选中态同时改背景和 selected；读屏通过 ArcadeAccessibility 报告为 RadioButton。
         applyChip(binding.chipAll, difficulty == RecordRepository.ALL_DIFFICULTIES);
         applyChip(binding.chipSimple, difficulty == 1);
         applyChip(binding.chipNormal, difficulty == 2);
@@ -106,6 +111,7 @@ public class RankingFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        // ViewBinding 持有整棵视图树；Fragment 视图销毁必须置空，否则页面不可见时仍持有 View。
         binding = null;
         adapter = null;
         super.onDestroyView();

@@ -39,6 +39,7 @@ public class RankingViewModel extends ViewModel {
     }
 
     public LiveData<List<GameRecord>> items() {
+        // 页面只观察结果；Cursor、SQLiteDatabase 都不进 UI 层。
         return items;
     }
 
@@ -55,6 +56,7 @@ public class RankingViewModel extends ViewModel {
     }
 
     public void delete(GameRecord record) {
+        // 删完立刻按当前筛选重查：排名/计数都由数据库重新算，不在内存里做“减一”。
         executor.execute(() -> {
             try {
                 repository.remove(record.getId());
@@ -66,6 +68,7 @@ public class RankingViewModel extends ViewModel {
     }
 
     private void load() {
+        // 每次筛选变化发一个序号；旧请求即使后返回也不能覆盖新筛选的结果。
         int seq = requestSeq.incrementAndGet();
         int requested = difficulty;
         executor.execute(() -> {
@@ -77,6 +80,7 @@ public class RankingViewModel extends ViewModel {
                 result = Collections.emptyList();
             }
             if (seq == requestSeq.get()) {
+                // postValue：从 Executor 线程回主线程；setValue 只能在主线程调。
                 items.postValue(result);
             }
         });
@@ -84,6 +88,7 @@ public class RankingViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
+        // shutdown 允许已排队的查询跑完；shutdownNow 会中断，删除后重查可能被丢掉。
         executor.shutdown();
         super.onCleared();
     }
