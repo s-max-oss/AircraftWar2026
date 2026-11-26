@@ -40,6 +40,7 @@ public class RecordRepository {
     /** 排行榜：全部或某一开局档位，按分数降序。 */
     public List<GameRecord> ranking(int initialDifficulty) {
         if (initialDifficulty == ALL_DIFFICULTIES) {
+            // 0 是“全部”筛选；排序仍由 DAO 的 SQL 做，不在这里二次 sort。
             return dao.getRankingRecords();
         }
         return dao.getRecordsByInitialDifficulty(initialDifficulty);

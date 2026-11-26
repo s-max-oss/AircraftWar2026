@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.material)
     // 单 Activity + Navigation：三页流转与回退栈交给 NavController（AGENTS §2 决策 9）
     implementation(libs.navigation.fragment)
+    // 实验四的存储用系统内置 SQLite（SQLiteOpenHelper），所以这里没有 Room 依赖；
+    // 同一 GameRecordDao 接口另有文件实现，见 platform/storage/FileRecordDao.java。
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

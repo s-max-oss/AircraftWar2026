@@ -14,6 +14,10 @@ import androidx.annotation.NonNull;
  * {@code SQLiteDatabase}，每 new 一次都会多一条连接；用 Activity 又会泄漏。这里只存
  * applicationContext，既保证全进程一个连接池，也不把页面带进静态字段。
  *
+ * <p>数据库文件落在应用沙箱：{@code /data/data/edu.hitsz.aircraftwar/databases/aircraftwar.db}
+ * （课件 p13/p15 的 Device Explorer 路径）。代码不硬编码这个绝对路径，而是交给
+ * {@code SQLiteOpenHelper} 按包名创建。
+ *
  * <p>为什么 {@code _id} 用 AUTOINCREMENT 且删除后不重排：桌面版把 id 当“序号”，删除一条后
  * 把后面所有 id 减一，列表刷新时行号会跳；排行榜的“排名”应该是查询结果的位置，不该落库。
  * 稳定的 {@code _id} 也让删除/更新有可靠主键。
@@ -78,6 +82,8 @@ public class RecordDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        // onCreate 只在数据库文件第一次创建时调一次；表结构用显式 TEXT/INTEGER，
+        // 不依赖 SQLite 的动态类型，列名与 GameRecord 字段一一对应，便于答辩时对着讲。
         db.execSQL(CREATE_TABLE);
         db.execSQL(CREATE_RANKING_INDEX);
         Log.i(TAG, "onCreate: " + DB_NAME + " v" + DB_VERSION);
