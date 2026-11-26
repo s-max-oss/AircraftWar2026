@@ -108,6 +108,33 @@
                     android:textSize="74sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/textNewRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_arcade_selected"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="0.08"
+                    android:paddingHorizontal="14dp"
+                    android:text="@string/gameover_new_record"
+                    android:textColor="@color/arcade_ink"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textBest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/arcade_ink_soft"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"

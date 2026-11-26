@@ -8,13 +8,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import edu.hitsz.aircraftwar.R;
+import edu.hitsz.aircraftwar.data.repository.RecordRepository;
 import edu.hitsz.aircraftwar.platform.audio.GameAudio;
+import edu.hitsz.aircraftwar.platform.storage.RecordDaoFactory;
 
 /**
  * 单 Activity 宿主：三页由 Navigation 换成 Fragment（AGENTS §2 决策 9）。
  *
  * <p>迁移说明：S1 的 MainActivity 直接 {@code new GameView(this)} 承载游戏画面；
- * S2 起画面下沉到 {@code ui/game/GameFragment}，本类只剩两件事：沉浸式全屏 + 持有音频实例。
+ * S2 起画面下沉到 {@code ui/game/GameFragment}，本类只剩三件事：沉浸式全屏、
+ * 持有音频实例、持有记录仓库（S3）。
  *
  * <p>为什么音频放在 Activity 而不是 Fragment：{@link GameAudio} 里有两个 9MB 的
  * {@code MediaPlayer} 和一个 {@code SoundPool}。若挂在游戏页上，每次"结算 → 再来一局"
@@ -25,6 +28,7 @@ import edu.hitsz.aircraftwar.platform.audio.GameAudio;
 public class MainActivity extends AppCompatActivity {
 
     private GameAudio gameAudio;
+    private RecordRepository recordRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         applyImmersiveMode();
         setContentView(R.layout.activity_main);
         gameAudio = new GameAudio(this);
+        // 记录仓库挂在 Activity 上（与音频同一模式）：SQLiteOpenHelper 内部用 applicationContext，
+        // 不会把页面带进静态字段；页面通过 records() 取。
+        recordRepository = new RecordRepository(RecordDaoFactory.create(this));
     }
 
     /** 游戏画面铺满整屏（视口按屏幕比例注入）；系统栏隐藏，向上滑可临时唤出。 */
@@ -47,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
     /** 全局唯一的音频门面。三个 Fragment 都从这里取，禁止各自 new。 */
     public GameAudio audio() {
         return gameAudio;
+    }
+
+    /** 全局唯一的记录仓库；排行榜、记录页、结算页共用。 */
+    public RecordRepository records() {
+        return recordRepository;
     }
 
     @Override

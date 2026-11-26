@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  页面流（docs/12-UI设计方案.md §2）：
+  页面流（docs/12-UI设计方案.md §2；S3 增补）：
   menu → game → gameover；
+  menu → ranking / record（S3 排行榜与记录页，返回用 popBackStack）；
   gameover 的"再来一局 / 返回主菜单"用代码 popBackStack 实现，
   不用 action —— 回退栈语义更直观，也能保证结算页不会留在栈里。
 -->
@@ -18,6 +19,12 @@
         <action
             android:id="@+id/action_menu_to_game"
             app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_menu_to_ranking"
+            app:destination="@id/rankingFragment" />
+        <action
+            android:id="@+id/action_menu_to_record"
+            app:destination="@id/recordFragment" />
     </fragment>
 
     <fragment
@@ -67,5 +74,27 @@
             android:name="durationSec"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="finalLevel"
+            android:defaultValue="1"
+            app:argType="integer" />
+        <argument
+            android:name="gameTimeMs"
+            android:defaultValue="0L"
+            app:argType="long" />
+        <argument
+            android:name="recordTime"
+            android:defaultValue="0L"
+            app:argType="long" />
     </fragment>
+
+    <fragment
+        android:id="@+id/rankingFragment"
+        android:name="edu.hitsz.aircraftwar.ui.ranking.RankingFragment"
+        android:label="@string/ranking_title" />
+
+    <fragment
+        android:id="@+id/recordFragment"
+        android:name="edu.hitsz.aircraftwar.ui.record.RecordFragment"
+        android:label="@string/record_title" />
 </navigation>

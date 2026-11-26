@@ -9,13 +9,18 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import edu.hitsz.aircraftwar.R;
+import edu.hitsz.aircraftwar.core.record.GameRecord;
+import edu.hitsz.aircraftwar.data.repository.RecordRepository;
 import edu.hitsz.aircraftwar.databinding.FragmentGameoverBinding;
+import edu.hitsz.aircraftwar.ui.MainActivity;
 import edu.hitsz.aircraftwar.ui.common.ArcadeAccessibility;
 import edu.hitsz.aircraftwar.ui.common.DifficultyLabels;
+import edu.hitsz.aircraftwar.ui.common.SimpleViewModelFactory;
 import edu.hitsz.aircraftwar.ui.game.GameFragment;
 
 /**
@@ -33,6 +38,7 @@ public class GameOverFragment extends Fragment {
     private String playerName;
     private int difficulty;
     private OnBackPressedCallback backCallback;
+    private GameOverViewModel viewModel;
 
     @Nullable
     @Override
@@ -67,6 +73,29 @@ public class GameOverFragment extends Fragment {
         binding.textDuration.setText(getString(R.string.gameover_duration_value,
                 durationSec / 60, durationSec % 60));
         binding.textDifficulty.setText(DifficultyLabels.of(requireContext(), difficulty));
+
+        int finalLevel = args == null ? difficulty
+                : args.getInt(GameFragment.GameOverArgs.FINAL_LEVEL, difficulty);
+        long gameTimeMs = args == null ? durationSec * 1000L
+                : args.getLong(GameFragment.GameOverArgs.GAME_TIME_MS, durationSec * 1000L);
+        long recordTime = args == null ? 0L
+                : args.getLong(GameFragment.GameOverArgs.RECORD_TIME, 0L);
+        if (recordTime <= 0L) {
+            recordTime = System.currentTimeMillis();
+        }
+        GameRecord record = new GameRecord(0, playerName, score, kills, gameTimeMs,
+                recordTime, finalLevel, difficulty);
+        RecordRepository repository = ((MainActivity) requireActivity()).records();
+        viewModel = new ViewModelProvider(this,
+                new SimpleViewModelFactory(() -> new GameOverViewModel(repository, record)))
+                .get(GameOverViewModel.class);
+        viewModel.bestResult().observe(getViewLifecycleOwner(), result -> {
+            if (result == null) {
+                return;
+            }
+            binding.textBest.setText(getString(R.string.gameover_best, result.bestScore));
+            binding.textNewRecord.setVisibility(result.newRecord ? View.VISIBLE : View.GONE);
+        });
 
         binding.btnRestart.setOnClickListener(v -> restart());
         binding.btnBackMenu.setOnClickListener(v -> backToMenu());

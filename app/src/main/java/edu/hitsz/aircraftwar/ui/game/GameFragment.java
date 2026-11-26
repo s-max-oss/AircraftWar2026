@@ -292,6 +292,9 @@ public class GameFragment extends Fragment implements GameEvents {
         args.putInt(GameOverArgs.SCORE, game.getScore());
         args.putInt(GameOverArgs.KILLS, game.getEnemiesKilled());
         args.putInt(GameOverArgs.DURATION_SEC, (int) (game.getGameTime() / 1000L));
+        args.putInt(GameOverArgs.FINAL_LEVEL, game.getDifficultyLevel());
+        args.putLong(GameOverArgs.GAME_TIME_MS, game.getGameTime());
+        args.putLong(GameOverArgs.RECORD_TIME, System.currentTimeMillis());
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_game_to_gameover, args);
     }
@@ -305,6 +308,9 @@ public class GameFragment extends Fragment implements GameEvents {
         public static final String SCORE = "score";
         public static final String KILLS = "kills";
         public static final String DURATION_SEC = "durationSec";
+        public static final String FINAL_LEVEL = "finalLevel";
+        public static final String GAME_TIME_MS = "gameTimeMs";
+        public static final String RECORD_TIME = "recordTime";
         public static final String PLAYER_NAME = ARG_PLAYER_NAME;
         public static final String DIFFICULTY = ARG_DIFFICULTY;
 

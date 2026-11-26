@@ -47,6 +47,8 @@ public class MainMenuFragment extends Fragment {
         ArcadeAccessibility.asSingleChoice(binding.btnNormal);
         ArcadeAccessibility.asSingleChoice(binding.btnHard);
         ArcadeAccessibility.asButton(binding.btnStart);
+        ArcadeAccessibility.asButton(binding.btnRanking);
+        ArcadeAccessibility.asButton(binding.btnRecords);
 
         // 图标按钮仍控制同一份持久化设置，音频行为不变。
         updateMusicButton();
@@ -59,6 +61,10 @@ public class MainMenuFragment extends Fragment {
         binding.btnNormal.setOnClickListener(v -> selectDifficulty(GameFragment.DIFFICULTY_NORMAL));
         binding.btnHard.setOnClickListener(v -> selectDifficulty(GameFragment.DIFFICULTY_HARD));
         binding.btnStart.setOnClickListener(v -> startGame());
+        binding.btnRanking.setOnClickListener(v -> NavHostFragment.findNavController(this)
+                .navigate(R.id.action_menu_to_ranking));
+        binding.btnRecords.setOnClickListener(v -> NavHostFragment.findNavController(this)
+                .navigate(R.id.action_menu_to_record));
 
         selectDifficulty(GameFragment.DIFFICULTY_NORMAL);
     }
